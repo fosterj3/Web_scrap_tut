@@ -1,0 +1,83 @@
+---
+title: "Web Scraping Example"
+author: "Lamar Foster"
+date: "2/20/2021"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+library(gganimate)
+library(ggthemes)
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#Scrape Movie Data 
+link <- "https://www.imdb.com/chart/top/"
+page <- read_html(link)
+name <-  page %>% html_nodes(".titleColumn a") %>% html_text()
+year <- page %>% html_nodes(".secondaryInfo") %>% html_text()
+rating <- page %>% html_nodes("strong") %>% html_text()
+
+#Turn into data frame 
+movies <- data.frame(name, year, rating, stringsAsFactors = F)
+
+movies <- movies %>% 
+mutate(ranking = seq(1,250))
+```
+
+```{r}
+#Data cleaning 
+movies <- movies %>% 
+  mutate(year = parse_number(year)) %>% 
+  mutate(rating = as.numeric(rating))
+
+```
+
+
+```{r}
+movies %>% 
+group_by(year) %>% 
+filter(year > "2000") %>% 
+summarise(rating = mean(rating)) %>% 
+arrange(rating) %>% 
+ggplot(aes(year, rating)) + 
+scale_y_continuous(breaks = seq(2000,2020, by = 5)) +
+geom_col()
+```
+
+```{r}
+#Visualize Movies Data Set 
+movies %>% 
+group_by(year, ranking) %>% 
+summarise(rating = mean(rating)) %>% 
+ggplot(aes(x = ranking, y=rating, size = year)) +
+  geom_point(show.legend = FALSE, alpha = 0.7) +
+  labs(x = "Ranking", y = "Average Rating") + 
+  theme_tufte() +
+  transition_time(year) +
+  labs(title = "Year: {frame_time}")
+```
+
+
+
+```{r}
+link_school <- "https://www.greatschools.org/search/search.zipcode?sort=rating&zip=37043"
+page_school <- read_html(link)
+name_school <-  page %>% html_nodes(".name") %>% html_attr()
+rating_school <- page %>% html_nodes("strong") %>% html_text()
+```
+
+
+
+
+
+
+
+
+
