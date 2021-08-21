@@ -98,7 +98,7 @@ minwa_clean <- minwa %>%
 
 ```{r}
 #Visualize the data
-minwa_clean %>% 
+min_anim <- minwa_clean %>% 
 ggplot(aes(x = year, y = wage)) +
   geom_point(color = "#85754d", aes(group = year)) +
   geom_line(color = "#4b2e83") + 
@@ -111,7 +111,15 @@ ggplot(aes(x = year, y = wage)) +
        y = "Minimum Wage") +
   geom_label(data = minwa_clean %>% filter(wage > 13.6), aes(label = scales::dollar(wage))) +
   theme_classic() + 
+  theme(axis.text.x = element_text(size=14),
+        axis.text.y = element_text(size=14),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        axis.title = element_text(size = 20)) +
   transition_reveal(year)
+animate(min_anim, end_pause = 30)
+anim_save("minwa.gif")
+
   
 ```
 
