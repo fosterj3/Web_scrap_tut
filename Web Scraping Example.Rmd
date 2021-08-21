@@ -64,8 +64,6 @@ ggplot(aes(x = ranking, y=rating, size = year)) +
   labs(title = "Year: {frame_time}")
 ```
 
-
-
 ```{r}
 link_school <- "https://www.greatschools.org/search/search.zipcode?sort=rating&zip=37043"
 page_school <- read_html(link)
@@ -75,6 +73,16 @@ rating_school <- page %>% html_nodes("strong") %>% html_text()
 
 
 
+```{r}
+#Scrape WA Min Wage Data 
+link <- "https://lni.wa.gov/workers-rights/wages/minimum-wage/history-of-washington-states-minimum-wage"
+page <- read_html(link)
+year <- page %>% html_nodes("td:nth-child(1)") %>% html_text()
+wage <- page %>% html_nodes("td+ td") %>% html_text()
+
+#Turn into data frame 
+minwa <- data.frame(year, wage, stringsAsFactors = F)
+```
 
 
 
