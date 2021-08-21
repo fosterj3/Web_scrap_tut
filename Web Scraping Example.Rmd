@@ -109,7 +109,7 @@ ggplot(aes(x = year, y = wage)) +
        subtitle = "Year: {frame_along}",
        x = "Year",
        y = "Minimum Wage") +
-  geom_label(data = minwa_clean %>% filter(wage > 13.6), aes(label = scales::dollar(wage))) +
+  geom_label(data = minwa_clean %>% filter(year == 2016), aes(label = scales::dollar(wage))) +
   theme_classic() + 
   theme(axis.text.x = element_text(size=14),
         axis.text.y = element_text(size=14),
@@ -117,7 +117,7 @@ ggplot(aes(x = year, y = wage)) +
         axis.title.y = element_text(size = 15),
         axis.title = element_text(size = 20)) +
   transition_reveal(year)
-animate(min_anim, end_pause = 30)
+animate(min_anim, end_pause = 15, width = 500, height = 450, fps = 5)
 anim_save("minwa.gif")
 
   
