@@ -11,6 +11,7 @@ library(rvest)
 library(gganimate)
 library(ggthemes)
 library(lubridate)
+library(ggrepel)
 ```
 
 ```{r setup, include=FALSE}
@@ -94,6 +95,23 @@ minwa_clean <- minwa %>%
          year = year(year))
 ```
 
+```{r}
+#Visualize the data
+minwa_clean %>% 
+ggplot(aes(x = year, y = wage)) +
+  geom_point(color = "#85754d") +
+  geom_line(color = "#4b2e83") + 
+  scale_x_continuous(breaks = seq(from = 1960, to = 2020, by = 10)) +
+  scale_y_continuous(breaks= seq(from = 0, to = 15, by = 3),
+                     labels = scales::dollar) +
+  labs(title = "Washington State Minimum Wage Change",
+       subtitle = "From 1960 to 2021",
+       x = "Year",
+       y = "Minimum Wage") +
+  geom_label(data = minwa_clean %>% filter(wage > 13.6), aes(label = scales::dollar(wage))) +
+  theme_classic()
+  
+```
 
 
 
