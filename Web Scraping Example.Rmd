@@ -10,6 +10,7 @@ library(tidyverse)
 library(rvest)
 library(gganimate)
 library(ggthemes)
+library(lubridate)
 ```
 
 ```{r setup, include=FALSE}
@@ -84,6 +85,14 @@ wage <- page %>% html_nodes("td+ td") %>% html_text()
 minwa <- data.frame(year, wage, stringsAsFactors = F)
 ```
 
+```{r}
+# Clean Min Wage Data frame 
+minwa_clean <- minwa %>% 
+  slice(-1) %>% 
+  mutate(wage = parse_number(wage),
+         year = mdy(year),
+         year = year(year))
+```
 
 
 
